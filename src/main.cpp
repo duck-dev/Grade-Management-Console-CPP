@@ -16,6 +16,8 @@
 #pragma comment(lib, "shell32.lib")
 using namespace std;
 
+string currentPath;
+string directory;
 char forbiddenCharacters[] { '<', '>', ':', '"', '/', '\\', '|', '?', '*' }; // Array needs to be initialized
 
 int main() {
