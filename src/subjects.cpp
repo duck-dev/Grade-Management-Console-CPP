@@ -96,10 +96,8 @@ void editSubject(bool remove) {
                 << endl;
                 string newName;
                 getline(cin, newName);
-                if(!newName.empty()) {
-                    //TODO: Replace current subject name with `newName`
+                if(!newName.empty())
                     writeToFile(position, newName);
-                }
             } else {
                 writeToFile(position, "", true);
             }
@@ -151,7 +149,7 @@ void addSubject() {
         return;
     }
 
-    outfile << endl; // ?
+    outfile << endl;
     outfile.close();
 
     continueProgram();

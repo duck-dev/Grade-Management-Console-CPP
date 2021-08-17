@@ -6,6 +6,7 @@
 #include <filesystem>
 #include "../Header Files/common.h"
 #include "../Header Files/main.h"
+#include "../Header Files/utilityfunctions.h"
 
 using namespace std;
 
@@ -59,7 +60,6 @@ void writeGrades(bool continueWriting) {
                 allGradesStr.append(to_string(i) + ",");
             }
 
-            //TODO: Insert `allGradesStr` into current line
             writeToFile(position, allGradesStr);
             break;
         }
@@ -90,7 +90,7 @@ void editGrades(bool remove) {
     if(subj.empty())
         return;
 
-    string outputGrade = string("Which grade do you want to").append(remove ? "remove?" : "edit?").append(" Pick a number or leave the line empty "
+    string outputGrade = string("Which grade do you want to ").append(remove ? "remove?" : "edit?").append(" Pick a number or leave the line empty "
                                                                                                           "and press ENTER to cancel the action.");
     cout << outputGrade << endl;
 
@@ -124,40 +124,38 @@ void editGrades(bool remove) {
             int chosenNumber = chooseNumber(outputGrade, i, []() { continueProgram(); });
             if(chosenNumber == -1)
                 return;
-            cout << "What do you want to overwrite this grade with? Please enter a whole number or a decimal number (use a dot as a 'comma'). If "
-                    "you want to delete the grade, leave the line empty and press the ENTER key. " << endl;
 
-            string newGrade;
-            bool approved = false;
-            do {
-                getline(cin, newGrade);
-                if(newGrade.empty())
-                    break;
-                try {
-                    stof(newGrade);
-                    approved = true;
-                } catch(...) {
-                    cout << "Please enter a valid number and use the dot as comma if necessary! " << endl;
-                }
-            } while(!approved);
-
-            if(newGrade.empty())
+            if(remove)
                 gradesVector.erase(gradesVector.begin() + chosenNumber);
-            else
-                gradesVector[chosenNumber] = newGrade;
+            else {
+                cout << "What do you want to overwrite this grade with? Please enter a whole number or a decimal number (use a dot as a 'comma'). If "
+                        "you want to delete the grade, leave the line empty and press the ENTER key. " << endl;
+
+                string newGrade;
+                do {
+                    cout << "Please enter a valid number and use the dot as a comma if necessary! " << endl;
+                    getline(cin, newGrade);
+                    if(newGrade.empty())
+                        break;
+                } while(!isFloat(newGrade));
+
+                if(newGrade.empty())
+                    gradesVector.erase(gradesVector.begin() + chosenNumber);
+                else
+                    gradesVector[chosenNumber] = newGrade;
+            }
 
             string allGradesDone;
             for(const string& s : gradesVector) {
                 allGradesDone.append(s + ",");
             }
-            // TODO: Replace new grades in file
+
             writeToFile(position, allGradesDone);
             break;
         }
 
-        if(str == subj) {
+        if(str == subj)
             foundSubject = true;
-        }
         position++;
     }
     file.close();
