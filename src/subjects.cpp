@@ -46,8 +46,8 @@ void inputSubjects() {
 
     outfile.close();
 
-    cout << "The subjects have been entered!" << endl;
-    cout << "Do you also want to enter grades? Enter 'y', if yes - otherwise, just press the Enter key! " << endl;
+    cout << "The " + to_string(subjects.size()) + " subjects have been entered!" << endl;
+    cout << "Do you also want to enter grades? Enter 'y' if yes - otherwise, just press the Enter key! " << endl;
 
     string continueWithWritingGrades;
     getline(cin, continueWithWritingGrades);
@@ -67,7 +67,7 @@ void inspectSubject() {
     while(getline(infile, str)) {
         if(foundSubject) {
             cout << subject << endl;
-            cout << str << endl; // str = grades
+            cout << formatGrades(str) << endl; // str = grades
             break;
         }
 
@@ -138,11 +138,11 @@ void addSubject() {
         auto grades = fillGrades();
         outfile.open(currentPath, ios_base::app);
         string allGradesStr;
-        for(float i : grades) {
-            allGradesStr.append(to_string(i) + ",");
+        for(const auto& i : grades) {
+            allGradesStr.append(i + ",");
         }
 
-        outfile << allGradesStr << endl; // Maybe not endl?
+        outfile << allGradesStr << endl;
         outfile.close();
 
         continueProgram();

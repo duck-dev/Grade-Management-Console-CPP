@@ -240,9 +240,7 @@ void continueProgram() {
             editGrades(true);
             break;
         case 7: {
-            vector<char> writable(directory.begin(), directory.end());
-            writable.push_back('\0');
-            takeYear(&writable[0]);
+            takeYear(directory.data());
             break;
         }
         case 8:
@@ -311,7 +309,5 @@ void writeToFile(int position, const string& newContent, bool remove) {
 }
 
 void removeYear() {
-    vector<char> writable(directory.begin(), directory.end());
-    writable.push_back('\0');
-    takeYear(&writable[0], true, true);
+    takeYear(directory.data(), true, true);
 }

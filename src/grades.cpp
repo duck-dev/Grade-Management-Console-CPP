@@ -12,18 +12,17 @@ using namespace std;
 
 string pickSubject(const string& output);
 
-vector<float> fillGrades() {
-    vector<float> grades;
+vector<string> fillGrades() {
+    vector<string> grades;
 
     string grade;
     do {
         cout << "Enter a grade and use . as a comma if it is a decimal number! If you're done, press the ENTER key and leave the line empty! " <<
         endl;
         getline(cin, grade);
-        try {
-            float gradeNr = stof(grade);
-            grades.push_back(gradeNr);
-        } catch(...) {
+        if(isFloat(grade))
+            grades.push_back(grade);
+        else {
             if(!grade.empty())
                 cout << "Enter a valid grade as a whole number or decimal number (use the period as a comma)! " << endl;
         }
@@ -56,8 +55,8 @@ void writeGrades(bool continueWriting) {
         if(gotSubj) {
             auto gradesList = fillGrades();
             string allGradesStr = str;
-            for(float i : gradesList) {
-                allGradesStr.append(to_string(i) + ",");
+            for(const auto& i : gradesList) {
+                allGradesStr.append(i + ",");
             }
 
             writeToFile(position, allGradesStr);
@@ -160,4 +159,17 @@ void editGrades(bool remove) {
     }
     file.close();
     continueProgram();
+}
+
+[[maybe_unused]] string formatGrades(string str) {
+    string finalGrades;
+    size_t pos;
+
+    string delimiter = ",";
+    while ((pos = str.find(delimiter)) != string::npos) {
+        finalGrades.append(str.substr(0, pos) + ", ");
+        str.erase(0, pos + delimiter.length());
+    }
+
+    return trimRight(finalGrades, ", ");
 }
